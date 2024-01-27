@@ -1,4 +1,5 @@
 import express from "express";
+import { protect } from "../middlewares/authMiddleware.js";
 import {
   GetGoal,
   SetGoal,
@@ -8,7 +9,7 @@ import {
 
 const router = express.Router();
 
-router.route('/').get(GetGoal).post(SetGoal)
-router.route('/:id').put(UpdateGoal).delete(DeleteGoal)
+router.route('/').get(protect, GetGoal).post(protect, SetGoal)
+router.route('/:id').put(protect, UpdateGoal).delete(protect, DeleteGoal)
 
 export default router;
