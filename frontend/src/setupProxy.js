@@ -11,7 +11,7 @@ module.exports = function(app) {
   app.use(
     '/api',
     createProxyMiddleware({
-      target: 'https://goal-setter-app.onrender.com',
+      target: 'https://goal-setter-app-api.onrender.com/',
       changeOrigin: true,
     })
   );
