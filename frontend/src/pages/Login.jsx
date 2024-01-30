@@ -1,12 +1,22 @@
 import { FaSignInAlt } from "react-icons/fa";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import { toast } from "react-toastify";
+import { reset, login } from "../features/auth/authSlice.js";
+import { Spinner } from "../components/Spinner.jsx";
 
 const Login = () => {
   const [formData, setFormData] = useState({
     email: "",
     password: "",
   });
-  const { email, password} = formData;
+  const { email, password } = formData;
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const { user, isLoading, isError, isSuccess, message } = useSelector(
+    (state) => state.auth
+  );
 
   const handleChange = (e) => {
     setFormData((prev) => ({
@@ -16,12 +26,26 @@ const Login = () => {
   };
   const handleSubmit = (e) => {
     e.preventDefault();
+    dispatch(login(formData));
   };
+  useEffect(() => {
+    if (isError) {
+      toast.error(message);
+    }
+    if (isSuccess || user) {
+      navigate("/");
+    }
+    dispatch(reset());
+  }, [user, isError, isSuccess, message, navigate, dispatch]);
+
+  if (isLoading) {
+    return <Spinner />;
+  }
   return (
     <>
       <section className="heading">
         <h1>
-          <FaSignInAlt /> Login 
+          <FaSignInAlt /> Login
         </h1>
         <p>Login and start setting goals</p>
       </section>

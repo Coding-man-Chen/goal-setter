@@ -7,26 +7,24 @@ const GetGoal = asyncHandler(async (req, res) => {
 });
 
 const SetGoal = asyncHandler(async (req, res) => {
-  const { id } = await userModel.findById(req.user.id);
   if (!req.body.text) {
     res.status(400);
     throw new Error("Please enter a text");
   }
   const goals = await goalModel.create({
     text: req.body.text,
-    user: id,
+    user: req.user.id,
   });
   res.status(200).json(goals);
 });
 
 const UpdateGoal = asyncHandler(async (req, res) => {
   const goals = await goalModel.findById(req.params.id);
-  const user = await userModel.findById(req.user.id);
-  if (!user) {
+  if (!req.user) {
     res.status(401);
     throw new Error("User not found");
   }
-  if (user.id !== goals.user.toString()) {
+  if (req.user.id !== goals.user.toString()) {
     res.status(401);
     throw new Error("User not authorized");
   }
@@ -50,13 +48,11 @@ const UpdateGoal = asyncHandler(async (req, res) => {
 
 const DeleteGoal = asyncHandler(async (req, res) => {
   const goals = await goalModel.findById(req.params.id);
-  const user = await userModel.findById(req.user.id);
-  console.log(goals.user.toString(), user.id);
-  if (!user) {
+  if (!req.user) {
     res.status(401);
     throw new Error("User not found");
   }
-  if (user.id !== goals.user.toString()) {
+  if (req.user.id !== goals.user.toString()) {
     res.status(401);
     throw new Error("User not authorized");
   }

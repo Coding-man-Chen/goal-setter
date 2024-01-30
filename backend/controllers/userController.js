@@ -21,7 +21,7 @@ const registerUser = asyncHandler(async (req, res) => {
   }
   const salt = await bycrypt.genSalt(10);
   const hashedPassword = await bycrypt.hash(password, salt);
-  const user = userModel.create({
+  const user = await userModel.create({
     name,
     email,
     password: hashedPassword,
@@ -55,8 +55,7 @@ const loginUser = asyncHandler(async (req, res) => {
 });
 
 const getMe = asyncHandler(async (req, res) => {
-  const { _id, name, email } = req.user;
-  res.json({ id: _id, name: name, email: email });
+  res.json(req.user);
 });
 
 export { registerUser, loginUser, getMe };
