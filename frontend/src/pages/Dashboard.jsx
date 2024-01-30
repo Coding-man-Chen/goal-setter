@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import Goalform from "../components/Goalform";
 import { getGoals, reset } from "../features/goals/goalSlice";
 import { Spinner } from "../components/Spinner";
-import GoalItem from '../components/GoalItem'
+import GoalItem from "../components/GoalItem";
 
 const Dashboard = () => {
   const navigate = useNavigate();
@@ -20,8 +20,9 @@ const Dashboard = () => {
     }
     if (!user) {
       navigate("/login");
+    } else {
+      dispatch(getGoals());
     }
-    dispatch(getGoals());
     return () => {
       dispatch(reset());
     };
@@ -36,7 +37,7 @@ const Dashboard = () => {
         <p>Goals Dashboard</p>
       </section>
       <Goalform />
-      {goals.length > 0 ? (
+      {goals.length > 800 ? (
         <section className="content">
           <div className="goals">
             {goals.map((goal) => (
